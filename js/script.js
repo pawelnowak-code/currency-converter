@@ -1,34 +1,43 @@
-let formElement = document.querySelector(".js-form");
-let amountElement = document.querySelector(".js-amount");
-let currencyElement = document.querySelector(".js-currency");
-let resultElement = document.querySelector(".js-result");
+{
 
-let exchangeRateEuro = 4.14;
-let exchangeRateUsd = 3.95;
-let exchangeRateGbp = 5.01;
-let exchangeRateChf = 4.41;
+    const recalculateResult = (amount, currency) => {
+        const exchangeRateEuro = 4.14;
+        const exchangeRateUsd = 3.95;
+        const exchangeRateGbp = 5.01;
+        const exchangeRateChf = 4.41;
 
-formElement.addEventListener("input", () => {
+        switch (currency) {
+            case "EUR":
+                return amount / exchangeRateEuro;
+            case "USD":
+                return amount / exchangeRateUsd;
+            case "GBP":
+                return amount / exchangeRateGbp;
+            case "CHF":
+                return amount / exchangeRateChf;
+        }
+    };
 
-    let amount = Number(amountElement.value);
-    let currency = currencyElement.value;
+    const onFormInput = () => {
 
-    let result;
+        const amountElement = document.querySelector(".js-amount");
+        const currencyElement = document.querySelector(".js-currency");
+        const resultElement = document.querySelector(".js-result");
 
-    switch (currency) {
-        case "EUR":
-            result = amount / exchangeRateEuro;
-            break;
-        case "USD":
-            result = amount / exchangeRateUsd;
-            break;
-        case "GBP":
-            result = amount / exchangeRateGbp;
-            break;
-        case "CHF":
-            result = amount / exchangeRateChf;
-            break;
+        const amount = Number(amountElement.value);
+        const currency = currencyElement.value;
+        const result = recalculateResult(amount, currency);
+
+        resultElement.innerHTML = amount <= 0 ? '<strong>Kwota musi być większa od 0 !</strong>' : `${amount.toFixed(2)} PLN = <strong> ${result.toFixed(2)} ${currency} </strong>`;
     }
 
-    resultElement.innerHTML = amount <= 0 ? '<strong>Kwota musi być większa od 0 !</strong>' : `${amount.toFixed(2)} PLN = <strong> ${result.toFixed(2)} ${currency} </strong>`;
-})
+    const init = () => {
+
+        const formElement = document.querySelector(".js-form");
+
+        formElement.addEventListener("input", onFormInput);
+
+    };
+
+    init();
+}
